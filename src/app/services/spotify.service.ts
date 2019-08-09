@@ -11,18 +11,21 @@ export class SpotifyService {
     console.log('Spotify listo')
   }
 
-  getNewRelases(){
+  getQuery( query:string ){
+
+    const url = `https://api.spotify.com/v1/${ query }`
+
     const headers = new HttpHeaders({
-      'Authorization': 'Bearer BQDZNpP-rIrLSg8dogQTbQgWDEC0Bhb3AslD3CBuvLQN-H55Ee8MC66otFSRD6V9jw2aDj-lskrkw56P3fUSxPGGkU1Fq2fEoe-24MyqmgKjP4hJDH6GifGpROUSdLA49eIK6ejJOtk9Ek33eNsOuGmhPaJtclwOvw'
+      'Authorization': 'Bearer BQAv7uwqb5kJSZzTfJvQrm7J8omxoMbtJ05NtRD3Ht76YHtcX9j0x43hzwRtTQEr8FqG6-s9F6pJPr_ssELZChcUFAABrqUMQ-9LZvhbUlpjyAiCmlDuhRWXgQ-MqqZqfDfGYzMUrFf4zXMVCkCQQAt40fyHEmeWQw'
     })
-    return this.http.get('https://api.spotify.com/v1/browse/new-releases',{ headers })
-    .pipe( map( data => data['albums'].items));
+    return this.http.get(url, { headers });
+  }
+
+  getNewRelases(){
+    return this.getQuery('browse/new-releases').pipe( map( data => data['albums'].items));
   }
   getArtista( termino: string ){
-    const headers = new HttpHeaders({
-      'Authorization': 'Bearer BQDZNpP-rIrLSg8dogQTbQgWDEC0Bhb3AslD3CBuvLQN-H55Ee8MC66otFSRD6V9jw2aDj-lskrkw56P3fUSxPGGkU1Fq2fEoe-24MyqmgKjP4hJDH6GifGpROUSdLA49eIK6ejJOtk9Ek33eNsOuGmhPaJtclwOvw'
-    })
-    return this.http.get(`https://api.spotify.com/v1/search?q=${ termino }&type=artist&limit=15`,{ headers })
-     .pipe( map ( data => data['artists'].items));
+    return this.getQuery(`search?q=${ termino }&type=artist&limit=15`)
+            .pipe( map( data => data['artists'].items ));
   }
 }
